@@ -9,15 +9,13 @@ istate = Node([1,2,3,4,0,5,6,7,8])
 frontier.view()
 expanded = expand_state(istate)
 EXPLORED.append(istate.state)
-
 for node in expand_state(istate):
     node:Node = node
     frontier.insert(node)
-    print(node)
-    print(f'h1: {node.heuristic} | pcost: {node.pcost} | evalf: {node.evaluef}')
-    print()
+    # print(node)
+    # print(f'h1: {node.heuristic} | pcost: {node.pcost} | evalf: {node.evaluef}')
+    # print()
 
-print()
 for node in frontier.nodes:
     node: Node = node
     print(node.evaluef)

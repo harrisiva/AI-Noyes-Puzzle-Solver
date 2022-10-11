@@ -82,9 +82,32 @@ class Frontier: # A Frontier (has a list that is ordered from lowest to highest 
         node = self.nodes[0]
         self.nodes = self.nodes[1:]
         return node
-    
+    def insort_right(self, a, x, lo, hi):
+        """Insert item x in list a, and keep it sorted assuming a is sorted.
+        If x is already in a, insert it to the right of the rightmost x.
+        Optional args lo (default 0) and hi (default len(a)) bound the
+        slice of a to be searched.
+        """
+
+        if lo < 0:
+            raise ValueError('lo must be non-negative')
+        if hi is None:
+            hi = len(a)
+        while lo < hi:
+            mid = (lo+hi)//2
+            if x.evaluef < a[mid].evaluef:
+                hi = mid
+            else:
+                lo = mid+1
+        a.insert(lo, x)
     def insert(self, node:Node):
+        if Frontier.is_empty(self): #Inserts node straight into array if empty
+            self.nodes.append(node)
+        else:
+            self.insort_right(self.nodes, node, 0 ,len(self.nodes))
+            
         # NOTE: NEed to write a sorting algorithm to insert it in here based on the evalf
+
         return
 
     def view(self):
@@ -92,6 +115,51 @@ class Frontier: # A Frontier (has a list that is ordered from lowest to highest 
             print(node)
             print('--'*10)
         return
+
+    def partition(self, array, low, high):
+ 
+        # choose the rightmost element as pivot
+        pivot = array[high].evaluef
+    
+        # pointer for greater element
+        i = low - 1
+    
+        # traverse through all elements
+        # compare each element with pivot
+        for j in range(low, high):
+            if array[j].evaluef <= pivot:
+    
+                # If element smaller than pivot is found
+                # swap it with the greater element pointed by i
+                i = i + 1
+    
+                # Swapping element at i with element at j
+                (array[i].evaluef, array[j].evaluef) = (array[j].evaluef, array[i].evaluef)
+    
+        # Swap the pivot element with the greater element specified by i
+        (array[i + 1].evaluef, array[high].evaluef) = (array[high].evaluef, array[i + 1].evaluef)
+    
+        # Return the position from where partition is done
+        return i + 1
+    
+    # function to perform quicksort
+    
+ 
+    def quickSort(self, array, low, high):
+        if low < high:
+    
+            # Find pivot element such that
+            # element smaller than pivot are on the left
+            # element greater than pivot are on the right
+            pi = self.partition(array, low, high)
+    
+            # Recursive call on the left of pivot
+            self.quickSort(array, low, pi - 1)
+    
+            # Recursive call on the right of pivot
+            self.quickSort(array, pi + 1, high)
+        
+        
 
 # Given a Node, this function expands it (generating valid states) and returns them as a list of nodes (where the child.parent is mapped to node and the child node gets appended to parent.children
 def expand_state(parent_node:Node)->list:
