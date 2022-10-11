@@ -1,0 +1,178 @@
+import math
+from copy import deepcopy
+
+GOAL_STATE = [0,1,2,3,4,5,6,7,8]
+def heuristic1(state_data:list)->int:
+    count=0
+    for i in range(0,len(state_data),1):  # Ignore the Blank in the sample state
+        if state_data[i]!=0:
+            if state_data[i]!=GOAL_STATE[i]:
+                count+=1
+    return count
+
+heuristicFunc = heuristic1 # Change this when you run the code to swtich from h1 to h2 or h3
+
+# NOTE: The state class is only accessed by the Node class (not accessed directly in the driver)
+class State:
+    def __init__(self,state:list): # Given a state as a list of integers, this method initializes the object by calculating the n (rows/cols) and i (index of the blank-0)
+        self.state:list = state
+        self.n = int(math.sqrt(len(self.state)))
+        self.i = self.state.index(0)
+        return
+
+    def derive(self,action)->list: # Given an action, this method returns a new state based on the current objects state as a list
+        action_shifts={0:-self.n,1:+self.n,2:-1,3:+1} # shifts of the index based on the applied action
+        # perform given action using the index shifts as calcualted in the action_shifts
+        state:list = deepcopy(self.state) # create a copy of the current objects state (to avoid changing the values it holds)
+        temp = state[self.i+action_shifts[action]] # create a temp variable with the value in the shift location
+        state[self.i+action_shifts[action]]=state[self.i] # move the blank to the index obtained from action_shift
+        state[self.i]=temp # replace the original blanks index with the value stored in temp (original value at state[action_shift[action]])
+        return state
+
+    def expand(self)->list: # returns a list of valid states as lists with data (using the derive method)
+        state:list = deepcopy(self.state) # create a copy of the current objects state (to avoid changing the values it holds)
+        expanded:list = []
+        if not 0<=self.i<=(self.n-1): expanded.append(self.derive(0)) # action=Up
+        if not (len(state)-self.n)<=self.i<=(len(state)-1): expanded.append(self.derive(1)) # action=Down
+        if not self.i%self.n==0: expanded.append(self.derive(2)) # action=Left
+        if not self.i%self.n==2: expanded.append(self.derive(3)) #action=Right
+        return expanded
+
+    # This function can later be used to produce the GUI
+    # NOTE: Bug right now but this function is used to view the list as a 2d matrix
+    def view(self)->str: 
+        state = deepcopy(self.state) # done to avoid any changes to the actual state
+        srepresentation: str = "" # String representation of the state
+        row = []
+        for i in range(0,len(state),1):
+            row.append(state[i])
+            srepresentation+=f'{state[i]} '
+            if i%self.n==self.n-1:
+                #print(row)
+                srepresentation+='\n' if i!=len(state)-1 else ''
+                row=[]
+        return srepresentation
+
+class Node: # This is the object that will be placed in the tree. It contains a State attribute followed by the parent state, pcost, and the heuristic evaluation
+    def __init__(self,state:list):
+        self.state:State = State(state)
+
+        # Tree data
+        self.parent: Node = None
+        self.children:list = [] # Contains a list of nodes
+
+        # Heuristic data (NOTE: Change default from none to -1 or something that takes less memory)
+        self.heuristic: int = heuristicFunc(self.state.state)
+        self.pcost: int = 0 # Path cost for the root node
+        self.evaluef: int = self.heuristic + self.pcost        
+        return
+    
+    def __str__(self):
+        return self.state.view()
+
+
+class Frontier: # A Frontier (has a list that is ordered from lowest to highest eval)
+    def __init__(self):
+        self.nodes = []
+        return
+
+    def is_empty(self): return len(self.nodes)==0 #NOTE: This function is mainly here to guide is when we translte it to C++
+    
+    def pop(self): # gives the front node (node with the lowest eval)
+        node = self.nodes[0]
+        self.nodes = self.nodes[1:]
+        return node
+    def insort_right(self, a, x, lo, hi):
+        """Insert item x in list a, and keep it sorted assuming a is sorted.
+        If x is already in a, insert it to the right of the rightmost x.
+        Optional args lo (default 0) and hi (default len(a)) bound the
+        slice of a to be searched.
+        """
+
+        if lo < 0:
+            raise ValueError('lo must be non-negative')
+        if hi is None:
+            hi = len(a)
+        while lo < hi:
+            mid = (lo+hi)//2
+            if x.evaluef < a[mid].evaluef:
+                hi = mid
+            else:
+                lo = mid+1
+        a.insert(lo, x)
+    def insert(self, node:Node):
+        if Frontier.is_empty(self): #Inserts node straight into array if empty
+            self.nodes.append(node)
+        else:
+            self.insort_right(self.nodes, node, 0 ,len(self.nodes))
+            
+        # NOTE: NEed to write a sorting algorithm to insert it in here based on the evalf
+
+        return
+
+    def view(self):
+        for node in self.nodes:
+            print(node)
+            print('--'*10)
+        return
+
+    def partition(self, array, low, high):
+ 
+        # choose the rightmost element as pivot
+        pivot = array[high].evaluef
+    
+        # pointer for greater element
+        i = low - 1
+    
+        # traverse through all elements
+        # compare each element with pivot
+        for j in range(low, high):
+            if array[j].evaluef <= pivot:
+    
+                # If element smaller than pivot is found
+                # swap it with the greater element pointed by i
+                i = i + 1
+    
+                # Swapping element at i with element at j
+                (array[i].evaluef, array[j].evaluef) = (array[j].evaluef, array[i].evaluef)
+    
+        # Swap the pivot element with the greater element specified by i
+        (array[i + 1].evaluef, array[high].evaluef) = (array[high].evaluef, array[i + 1].evaluef)
+    
+        # Return the position from where partition is done
+        return i + 1
+    
+    # function to perform quicksort
+    
+ 
+    def quickSort(self, array, low, high):
+        if low < high:
+    
+            # Find pivot element such that
+            # element smaller than pivot are on the left
+            # element greater than pivot are on the right
+            pi = self.partition(array, low, high)
+    
+            # Recursive call on the left of pivot
+            self.quickSort(array, low, pi - 1)
+    
+            # Recursive call on the right of pivot
+            self.quickSort(array, pi + 1, high)
+        
+        
+
+# Given a Node, this function expands it (generating valid states) and returns them as a list of nodes (where the child.parent is mapped to node and the child node gets appended to parent.children
+def expand_state(parent_node:Node)->list:
+    # Expand the nodes, set their parent fields, and update the parents children field
+    # Also add the nodes to the frontier which will use their Node.eval to sort the list
+    expanded_nodes = []
+    expanded_states:list = parent_node.state.expand() 
+    for state in expanded_states:
+        state: State = state # redeclared variable with type for ease of development
+        child_node: Node = Node(state)
+        child_node.parent = parent_node
+        child_node.pcost = parent_node.pcost+1
+        child_node.evaluef = child_node.pcost+child_node.heuristic
+        parent_node.children.append(child_node)
+        expanded_nodes.append(child_node)
+    return expanded_nodes
