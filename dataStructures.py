@@ -1,7 +1,7 @@
 import math
 from copy import deepcopy
 
-GOAL_STATE = [0,1,2,3,4,5,6,7,8]
+GOAL_STATE = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 def heuristic1(state_data:list)->int:
     count=0
     for i in range(0,len(state_data),1):  # Ignore the Blank in the sample state
