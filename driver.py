@@ -4,15 +4,15 @@ from itertools import permutations
 from time import sleep
 
 # Set the goal state
-GOAL_STATE = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+GOAL_STATE = [0,1,2,3,4,5,6,7,8]
 # Create a list to keep track of the explored nodes (check using is_in)
 EXPLORED_SET = []
 
 
 # Generate all permutations, given the goal state. Filter by disorder parameter.
-#initial_states = [list(permutation) for permutation in permutations(GOAL_STATE) if (get_disorder_parameter(list(permutation))%2==0)]
+initial_states = [list(permutation) for permutation in permutations(GOAL_STATE) if (get_disorder_parameter(list(permutation))%2==0)]
 # Select the first hundered (or sort, possibly using the same insort right algo, by smallest to largest disorder parameter and then select the first 100) and convert them to nodes
-#initial_state_nodes=[Node(state) for state in initial_states[:100]] # The first one is the goal state
+initial_state_nodes=[Node(state) for state in initial_states[:100]] # The first one is the goal state
 
 """
 root_node = initial_state_nodes[1]
@@ -51,7 +51,7 @@ else:
 # Logic following slide 27 from m3-search
 # ---------------------------------------
 # Pick the first node from the initial state nodes to set as this iterations initial state
-initial_node = Node([0,2,3,1,4,5,6,7,8,9,10,11,12,13,14,15]) #initial_state_nodes[1] # [0] is the goal state
+initial_node = initial_state_nodes[4] # [0] is the goal state
 # Initialize the frontier using the intiailize state
 frontier = Frontier()
 frontier.insert(initial_node)
