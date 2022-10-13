@@ -113,6 +113,16 @@ class Frontier: # A Frontier (has a list that is ordered from lowest to highest 
         for node in self.nodes: to_return+=f'{str(node.evaluef)},'
         return f'[{to_return}]'
 
+class Tree:
+    def __init__(self, root:Node):
+        self.root = root # The children for the root node are stored within the root nodes .nodes list
+        self.nodes = [] # A list of all the nodes in the tree (Appended in order of three restrictions (max 4 children))
+        return
+    def __str__(self): # NOTE: Refine this method later, we will rarely need to print the tree itself, just there for logic purposes
+        for node in self.nodes:
+            print(node)
+        return
+
 # Given a Node, this function expands it (generating valid states) and returns them as a list of nodes (where the child.parent is mapped to node and the child node gets appended to parent.children
 def expand_state(parent_node:Node)->list:
     # Expand the nodes, set their parent fields, and update the parents children field
