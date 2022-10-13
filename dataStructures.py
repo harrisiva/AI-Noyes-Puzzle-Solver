@@ -154,7 +154,7 @@ def get_disorder_parameter(state:list)->int: # Calculate the disorder parameter 
             dp = dp+1 if (state[i]-state[j])>0 else dp # if the difference is positive, that means state[i]>state[j], in that case increment it by 1
     return dp
 
-def is_in(EXPLORED_SET: Node,  given_node:Node):
+def is_in(EXPLORED_SET: list,  given_node:Node):
     given_node:list = given_node.state.state
     is_inside = False
     for node in EXPLORED_SET:
