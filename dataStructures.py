@@ -2,6 +2,7 @@ import math
 from copy import deepcopy
 
 GOAL_STATE = [0,1,2,3,4,5,6,7,8]
+
 def heuristic1(state_data:list)->int:
     count=0
     for i in range(0,len(state_data),1):  # Ignore the Blank in the sample state
@@ -82,84 +83,53 @@ class Frontier: # A Frontier (has a list that is ordered from lowest to highest 
         node = self.nodes[0]
         self.nodes = self.nodes[1:]
         return node
-    def insort_right(self, a, x, lo, hi):
+
+    def insert(self, node:Node): 
         """Insert item x in list a, and keep it sorted assuming a is sorted.
         If x is already in a, insert it to the right of the rightmost x.
         Optional args lo (default 0) and hi (default len(a)) bound the
         slice of a to be searched.
         """
-
-        if lo < 0:
-            raise ValueError('lo must be non-negative')
-        if hi is None:
-            hi = len(a)
-        while lo < hi:
-            mid = (lo+hi)//2
-            if x.evaluef < a[mid].evaluef:
-                hi = mid
-            else:
-                lo = mid+1
-        a.insert(lo, x)
-    def insert(self, node:Node):
-        if Frontier.is_empty(self): #Inserts node straight into array if empty
+        if self.is_empty():
             self.nodes.append(node)
         else:
-            self.insort_right(self.nodes, node, 0 ,len(self.nodes))
-            
-        # NOTE: NEed to write a sorting algorithm to insert it in here based on the evalf
-
+            lo, hi = 0, len(self.nodes) # Rather than taking these as inputs, we can just define them here (no real difference, but we can turn this into one sort function)
+            while lo < hi: # Looped to keep narrowing the indexes untill you find the spot
+                mid = (lo+hi)//2 # Floor division
+                if node.evaluef < self.nodes[mid].evaluef:
+                    hi = mid
+                else:
+                    lo = mid+1
+            self.nodes.insert(lo, node) # We need to rewrite this in C++
         return
 
-    def view(self):
+    def view(self): # Prints each nodes state from the frontier
         for node in self.nodes:
             print(node)
             print('--'*10)
         return
 
-    def partition(self, array, low, high):
- 
-        # choose the rightmost element as pivot
-        pivot = array[high].evaluef
-    
-        # pointer for greater element
-        i = low - 1
-    
-        # traverse through all elements
-        # compare each element with pivot
-        for j in range(low, high):
-            if array[j].evaluef <= pivot:
-    
-                # If element smaller than pivot is found
-                # swap it with the greater element pointed by i
-                i = i + 1
-    
-                # Swapping element at i with element at j
-                (array[i].evaluef, array[j].evaluef) = (array[j].evaluef, array[i].evaluef)
-    
-        # Swap the pivot element with the greater element specified by i
-        (array[i + 1].evaluef, array[high].evaluef) = (array[high].evaluef, array[i + 1].evaluef)
-    
-        # Return the position from where partition is done
-        return i + 1
-    
-    # function to perform quicksort
-    
- 
-    def quickSort(self, array, low, high):
-        if low < high:
-    
-            # Find pivot element such that
-            # element smaller than pivot are on the left
-            # element greater than pivot are on the right
-            pi = self.partition(array, low, high)
-    
-            # Recursive call on the left of pivot
-            self.quickSort(array, low, pi - 1)
-    
-            # Recursive call on the right of pivot
-            self.quickSort(array, pi + 1, high)
-        
-        
+    def contains(self,node:Node)->bool: # checks if the given node is already a part of the frontier, if true, return true, else false
+        does_contain=False
+        for nodes in self.nodes:
+            if nodes.state.state==node.state.state:
+                does_contain = True
+        return does_contain
+
+    def __str__(self): # [evaluef of 1,.....,evaluef of n-1,]
+        to_return = ""
+        for node in self.nodes: to_return+=f'{str(node.evaluef)},'
+        return f'[{to_return}]'
+
+class Tree:
+    def __init__(self, root:Node):
+        self.root = root # The children for the root node are stored within the root nodes .nodes list
+        self.nodes = [] # A list of all the nodes in the tree (Appended in order of three restrictions (max 4 children))
+        return
+    def __str__(self): # NOTE: Refine this method later, we will rarely need to print the tree itself, just there for logic purposes
+        for node in self.nodes:
+            print(node)
+        return
 
 # Given a Node, this function expands it (generating valid states) and returns them as a list of nodes (where the child.parent is mapped to node and the child node gets appended to parent.children
 def expand_state(parent_node:Node)->list:
@@ -176,3 +146,20 @@ def expand_state(parent_node:Node)->list:
         parent_node.children.append(child_node)
         expanded_nodes.append(child_node)
     return expanded_nodes
+
+# Function to calculate the disorder parameter
+def get_disorder_parameter(state:list)->int: # Calculate the disorder parameter of the given state
+    dp = 0
+    for i in range(0,len(state)-1,1): # Dont need to bother with the last element as there are no elements in front of it (so you subtract one from the length)
+        for j in range(i+1,len(state),1): # Dont need to check the current number with itself (so you add 1 to i)
+            dp = dp+1 if (state[i]-state[j])>0 else dp # if the difference is positive, that means state[i]>state[j], in that case increment it by 1
+    return dp
+
+def is_in(EXPLORED_SET: list,  given_node:Node):
+    given_node:list = given_node.state.state
+    is_inside = False
+    for node in EXPLORED_SET:
+        node = node.state.state
+        if node==given_node:
+            is_inside=True
+    return is_inside
