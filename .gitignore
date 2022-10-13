@@ -1,5 +1,6 @@
 # Files
 __pycache__/
+*pyc
 
 # Prerequisites
 *.d
