@@ -51,7 +51,7 @@ else:
 # Logic following slide 27 from m3-search
 # ---------------------------------------
 # Pick the first node from the initial state nodes to set as this iterations initial state
-initial_node = initial_state_nodes[4] # [0] is the goal state
+initial_node = initial_state_nodes[1] # [0] is the goal state
 # Initialize the frontier using the intiailize state
 frontier = Frontier()
 frontier.insert(initial_node)

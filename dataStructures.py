@@ -11,6 +11,37 @@ def heuristic1(state_data:list)->int:
                 count+=1
     return count
 
+def heuristic2(state_data:list)->int:
+    """
+    Description: Get sum of all manhattan distances
+    Returns: Total Manhattan Distance
+    """
+    # Declarations:
+    manhattanCount = 0
+    rowCurr = 0
+    colCurr = 0
+    rowGoal = 0
+    colGoal = 0
+
+    for i in range(0, len(state_data), 1):
+        # print("i index: {}, state_data: {}, R{}C{}".format(i, state_data[i], math.floor(i/3), i%3))
+        if state_data[i] != 0:
+            if state_data[i] != GOAL_STATE[i]:
+                # Current RC:
+                rowCurr = math.floor(i/3) # returns 0-2 row locations
+                colCurr = i%3 # returns 0-2 col locations
+                
+                # Goal RC:
+                # Data at I --> find where it should be in goal state --> get RC
+                goalIndex = GOAL_STATE.index(state_data[i]) 
+                rowGoal = math.floor(rowGoal/3)
+                colGoal = goalIndex%3
+
+                # Manhattan Distance:
+                manhattanCount += (abs(rowCurr - rowGoal) + abs(colCurr - colGoal))
+
+    return manhattanCount
+
 heuristicFunc = heuristic1 # Change this when you run the code to swtich from h1 to h2 or h3
 
 # NOTE: The state class is only accessed by the Node class (not accessed directly in the driver)
