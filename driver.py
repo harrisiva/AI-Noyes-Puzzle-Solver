@@ -74,7 +74,23 @@ while solution==False:
             if frontier.contains(derived_node)!=True and is_in(EXPLORED_SET,derived_node)!=True:
                 frontier.insert(derived_node)
 
-print(solution)
-print(node)
 # If solution==True
 # Create a list of the parent nodes, flip it, and print the steps
+if solution:
+    print("SOLUTION FOUND!!!")
+    solution_steps = []
+    parent_node = node.parent
+    while node!=None:
+        solution_steps.append(node)
+        node = node.parent
+    solution_steps = solution_steps[::-1] # Flip the nodes (alternative is to pre-pend)
+    
+    # Print the solution
+    print("parent:")
+    print(initial_node)
+    print('--------')
+    print("Root:")
+    for nodes in solution_steps:
+        nodes:Node = nodes
+        print(nodes) # Represent this as a GUI and we're doneeee with 3x3!!!
+        print('--------')
