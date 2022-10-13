@@ -102,13 +102,13 @@ class Frontier: # A Frontier (has a list that is ordered from lowest to highest 
             self.nodes.insert(lo, node) # We need to rewrite this in C++
         return
 
-    def view(self):
+    def view(self): # Prints each nodes state from the frontier
         for node in self.nodes:
             print(node)
             print('--'*10)
         return
 
-    def __str__(self):
+    def __str__(self): # [evaluef of 1,.....,evaluef of n-1,]
         to_return = ""
         for node in self.nodes: to_return+=f'{str(node.evaluef)},'
         return f'[{to_return}]'
