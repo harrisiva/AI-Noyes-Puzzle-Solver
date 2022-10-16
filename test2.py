@@ -8,6 +8,8 @@ def debug(node:Node):
     return
 
 expanded = expand_state(Node(node))
+
+debug(Node(node))
 debug(expanded[0])
 debug(expanded[1])
 debug(expanded[2])
