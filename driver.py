@@ -1,7 +1,6 @@
 # Driver for 3x3
 from dataStructures import *
 from itertools import permutations
-from time import sleep
 
 # Set the goal state
 GOAL_STATE = [0,1,2,3,4,5,6,7,8]
@@ -14,44 +13,11 @@ initial_states = [list(permutation) for permutation in permutations(GOAL_STATE) 
 # Select the first hundered (or sort, possibly using the same insort right algo, by smallest to largest disorder parameter and then select the first 100) and convert them to nodes
 initial_state_nodes=[Node(state) for state in initial_states[:100]] # The first one is the goal state
 
-"""
-root_node = initial_state_nodes[1]
-# Initialize the tree using the root node
-tree = Tree(root_node)
-# Intiailzie the frontier
-frontier = Frontier()
-
-current_node = root_node # Set the root node as the current node
-
-print(current_node)
-if current_node.state.state==GOAL_STATE: # If the current node is the goal state, end script
-    print("GOAL STATE")
-    # Go to the next node in the intiail_state_nodes
-else:
-    # Expand the node
-    nodes_children = expand_state(current_node)
-    # Add the current node to the explored nodes list
-    EXPLORED_SET.append(current_node)
-    # Add the expanded nodes to the frontier if its not already in the frontier and if its not in the frontier or explored list already
-    for node in nodes_children:
-        if frontier.contains(node)!=True and is_in(EXPLORED_SET,node)!=True:
-            frontier.insert(node)
-
-    # Pop a node from the frontier and repeat the following
-    print(frontier)
-    print(EXPLORED_SET)
-    print(frontier.pop())
-    print(frontier)
-    print(frontier.pop())
-    print(frontier)
-
-"""
-
-
 # Logic following slide 27 from m3-search
 # ---------------------------------------
 # Pick the first node from the initial state nodes to set as this iterations initial state
 initial_node = initial_state_nodes[1] # [0] is the goal state
+print(initial_node.state.state)
 # Initialize the frontier using the intiailize state
 frontier = Frontier()
 frontier.insert(initial_node)
