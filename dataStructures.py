@@ -15,12 +15,14 @@ def heuristic1(state_data:list)->int:
 
 def heuristic2(state_data:list):
     # gotta reshape this array to np array
+    GOAL = np.array(GOAL_STATE).reshape(3,3)
     Initial = np.array(state_data).reshape(3,3)
     dist = 0 
     for i in range(len(Initial)):
         for j in range(len(Initial[i])):
             if Initial[i][j] == 0:
                 continue
+
             temp = np.where(GOAL == Initial[i][j])
             dist += abs(temp[0][0] - i) + abs(temp[1][0]-j)
     return dist
