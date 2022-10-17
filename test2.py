@@ -46,3 +46,30 @@ print(frontier)
 
 
 expanded2 = expand_state(node3)
+
+
+# Testing the frontier pop function
+print("Testing the pop function")
+pop1 = frontier.pop()
+debug(pop1)
+print(frontier)
+
+pop1 = frontier.pop()
+debug(pop1)
+print(frontier)
+
+pop1 = frontier.pop()
+debug(pop1)
+print(frontier)
+
+pop1 = frontier.pop()
+debug(pop1)
+print(frontier)
+
+pop1 = frontier.pop()
+debug(pop1)
+print(frontier)
+
+pop1 = frontier.pop()
+debug(pop1)
+print(frontier)
