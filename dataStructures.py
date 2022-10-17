@@ -1,14 +1,19 @@
 import math
 from copy import deepcopy
-import numpy
+import numpy as np
 
 GOAL_STATE = [0,1,2,3,4,5,6,7,8]
 HASH = {1:[1,0], 2:[2,0], 3:[0,3], 4:[1,3], 5:[2,3], 6:[0,6], 7:[1,6], 8:[2,6]}
 
 def heuristic1(state_data:list)->int:
-    # Convert state data into an np array called Inital
+    count=0
+    for i in range(0,len(state_data),1):  # Ignore the Blank in the sample state
+        if state_data[i]!=0:
+            if state_data[i]!=GOAL_STATE[i]:
+                count+=1
+    return count
 
-    
+ def heuristic2(Initial: np.array):
     dist = 0 
     for i in range(len(Initial)):
         for j in range(len(Initial[i])):
@@ -17,6 +22,7 @@ def heuristic1(state_data:list)->int:
             temp = np.where(GOAL == Initial[i][j])
             dist += abs(temp[0][0] - i) + abs(temp[1][0]-j)
     return dist
+
 
 def heuristic3(initial_state:list)->int: #Checks number of values in the wrong row and wrong column
     #heuristic gotten from https://cse.iitk.ac.in/users/cs365/2009/ppt/13jan_Aman.pdf
