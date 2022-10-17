@@ -1,47 +1,22 @@
 import math
 from copy import deepcopy
+import numpy
 
 GOAL_STATE = [0,1,2,3,4,5,6,7,8]
 HASH = {1:[1,0], 2:[2,0], 3:[0,3], 4:[1,3], 5:[2,3], 6:[0,6], 7:[1,6], 8:[2,6]}
 
 def heuristic1(state_data:list)->int:
-    count=0
-    for i in range(0,len(state_data),1):  # Ignore the Blank in the sample state
-        if state_data[i]!=0:
-            if state_data[i]!=GOAL_STATE[i]:
-                count+=1
-    return count
+    # Convert state data into an np array called Inital
 
-def heuristic2(state_data:list)->int:
-    """
-    Description: Get sum of all manhattan distances
-    Returns: Total Manhattan Distance
-    """
-    # Declarations:
-    manhattanCount = 0
-    rowCurr = 0
-    colCurr = 0
-    rowGoal = 0
-    colGoal = 0
-
-    for i in range(0, len(state_data), 1):
-        # print("i index: {}, state_data: {}, R{}C{}".format(i, state_data[i], math.floor(i/3), i%3))
-        if state_data[i] != 0:
-            if state_data[i] != GOAL_STATE[i]:
-                # Current RC:
-                rowCurr = math.floor(i/3) # returns 0-2 row locations
-                colCurr = i%3 # returns 0-2 col locations
-                
-                # Goal RC:
-                # Data at I --> find where it should be in goal state --> get RC
-                goalIndex = GOAL_STATE.index(state_data[i]) 
-                rowGoal = math.floor(rowGoal/3)
-                colGoal = goalIndex%3
-
-                # Manhattan Distance:
-                manhattanCount += (abs(rowCurr - rowGoal) + abs(colCurr - colGoal))
-
-    return manhattanCount
+    
+    dist = 0 
+    for i in range(len(Initial)):
+        for j in range(len(Initial[i])):
+            if Initial[i][j] == 0:
+                continue
+            temp = np.where(GOAL == Initial[i][j])
+            dist += abs(temp[0][0] - i) + abs(temp[1][0]-j)
+    return dist
 
 def heuristic3(initial_state:list)->int: #Checks number of values in the wrong row and wrong column
     #heuristic gotten from https://cse.iitk.ac.in/users/cs365/2009/ppt/13jan_Aman.pdf
