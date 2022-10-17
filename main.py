@@ -34,14 +34,13 @@ print(len(set_3))
 
 #initial_state_nodes=[Node(state) for state in initial_states[1:101]] # The first one is the goal state
 
-
-#print(initial_state_nodes[50])
-EXPLORED_SET = []
-print(set_3[0])
-solution = graph_search(set_3[0],EXPLORED_SET)
-print(solution.pcost)
-print(len(EXPLORED_SET))
-
 # Required Data:
 # Number of steps to find the solution
 # Number of nodes expanded by A* in each case
+set_ = set_1
+with open('log.txt','w') as file:
+    for i in range(0,len(set_),1):
+        EXPLORED_SET = []
+        solution = graph_search(set_3[0],EXPLORED_SET)
+        file.write(f'{i}){solution.pcost},{len(EXPLORED_SET)},{set_[i].state.state}\n')
+        print(f'{i}) Solved {set_[i].state.state}')
