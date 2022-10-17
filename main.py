@@ -1,7 +1,11 @@
 from dataStructures import *
+from itertools import permutations
 import time
 
-# I believe the loop might be wrong, we need to start of by rewriting it and then trying to reduce the number of iterations for the ss i sent to the GC
+def debug(node:Node):
+    print(node)
+    print(f'Path Cost: {node.pcost} Heuristic: {node.heuristic} Evaluative Function: {node.evaluef} Dp: {get_disorder_parameter(node.state.state)}')
+    return
 
 GOAL_STATE = [0,1,2,3,4,5,6,7,8]
 def graph_search(initial_state:Node):
@@ -18,7 +22,28 @@ def graph_search(initial_state:Node):
             if frontier.contains(child)!=True and is_in(EXPLORED_SET,child)!=True: frontier.insert(child)
 
 
-initial_state = [7,2,4,5,0,6,8,3,1]
+# Generate all permutations, given the goal state. Filter by disorder parameter.
+initial_states = [list(permutation) for permutation in permutations(GOAL_STATE) if (get_disorder_parameter(list(permutation))%2==0)]
+# Select the first hundered (or sort, possibly using the same insort right algo, by smallest to largest disorder parameter and then select the first 100) and convert them to nodes
+initial_state_nodes=[Node(state) for state in initial_states[1:101]] # The first one is the goal state
+
+
+
+def count_of(solution:Node):
+    count = 0
+    while solution!=None:
+        count += 1
+        solution=solution.parent
+    return count
+
+
+for initial_node in initial_state_nodes:
+    debug(initial_node)
+    solution = graph_search(initial_node)
+    if solution!=False: print(f'Solution Cost: {count_of(solution)}\n')
+
+
+"""
 start_time = time.time()
 solution = graph_search(Node(initial_state))
 end_time = time.time()
@@ -29,3 +54,4 @@ if solution!=False:
         count += 1
     print(count)
     print(end_time-start_time)
+"""

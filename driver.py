@@ -16,8 +16,9 @@ initial_state_nodes=[Node(state) for state in initial_states[:100]] # The first 
 # Logic following slide 27 from m3-search
 # ---------------------------------------
 # Pick the first node from the initial state nodes to set as this iterations initial state
-initial_node = initial_state_nodes[1] # [0] is the goal state
-print(initial_node.state.state)
+initial_node = initial_state_nodes[99] # [0] is the goal state
+print(initial_node)
+print()
 # Initialize the frontier using the intiailize state
 frontier = Frontier()
 frontier.insert(initial_node)
