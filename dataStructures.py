@@ -42,7 +42,23 @@ def heuristic2(state_data:list)->int:
 
     return manhattanCount
 
-heuristicFunc = heuristic1 # Change this when you run the code to swtich from h1 to h2 or h3
+HASH = {1:[1,0], 2:[2,0], 3:[0,3], 4:[1,3], 5:[2,3], 6:[0,6], 7:[1,6], 8:[2,6]}
+
+def heuristic3(initial_state:list)->int: #Checks number of values in the wrong row and wrong column
+    #heuristic gotten from https://cse.iitk.ac.in/users/cs365/2009/ppt/13jan_Aman.pdf
+    misplaced_row = 0
+    misplaced_col = 0
+    for i in range(len(initial_state)):
+        if initial_state[i] ==0:
+            continue
+        temp = HASH[initial_state[i]]
+        if i%3 != temp[0]:
+            misplaced_col +=1
+        if i < temp[1] or i > (temp[1] +2):
+            misplaced_row +=1
+    return misplaced_col + misplaced_row
+
+heuristicFunc = heuristic3 # Change this when you run the code to swtich from h1 to h2 or h3
 
 # NOTE: The state class is only accessed by the Node class (not accessed directly in the driver)
 class State:

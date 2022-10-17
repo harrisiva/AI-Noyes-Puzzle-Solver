@@ -24,13 +24,9 @@ def graph_search(initial_state:Node, EXPLORED_SET):
 # Generate all permutations, given the goal state. Filter by disorder parameter.
 initial_states = [list(permutation) for permutation in permutations(GOAL_STATE) if (get_disorder_parameter(list(permutation))%2==0)]
 # Select the first hundered (or sort, possibly using the same insort right algo, by smallest to largest disorder parameter and then select the first 100) and convert them to nodes
-set_1 = [Node(state) for state in initial_states[1:26]]
-set_2 = [Node(state) for state in initial_states[100:125]]
-set_3 = [Node(state) for state in initial_states[50000:50025]]
+set_1 = [Node(state) for state in initial_states[1:100000]]
 
 print(len(set_1))
-print(len(set_2))
-print(len(set_3))
 
 #initial_state_nodes=[Node(state) for state in initial_states[1:101]] # The first one is the goal state
 
@@ -38,9 +34,9 @@ print(len(set_3))
 # Number of steps to find the solution
 # Number of nodes expanded by A* in each case
 set_ = set_1
-with open('log.txt','w') as file:
+with open('logh3.txt','w') as file:
     for i in range(0,len(set_),1):
         EXPLORED_SET = []
-        solution = graph_search(set_3[0],EXPLORED_SET)
+        solution = graph_search(set_[0],EXPLORED_SET)
         file.write(f'{i}){solution.pcost},{len(EXPLORED_SET)},{set_[i].state.state}\n')
         print(f'{i}) Solved {set_[i].state.state}')
