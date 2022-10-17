@@ -13,7 +13,9 @@ def heuristic1(state_data:list)->int:
                 count+=1
     return count
 
- def heuristic2(Initial: np.array):
+def heuristic2(state_data:list):
+    # gotta reshape this array to np array
+    Initial = np.array(state_data).reshape(3,3)
     dist = 0 
     for i in range(len(Initial)):
         for j in range(len(Initial[i])):
@@ -39,7 +41,7 @@ def heuristic3(initial_state:list)->int: #Checks number of values in the wrong r
         if i < temp[1] or i > (temp[1] +2):
             misplaced_row +=1
     return misplaced_col + misplaced_row
-heuristicFunc = heuristic1 # Change this when you run the code to swtich from h1 to h2 or h3
+heuristicFunc = heuristic2 # Change this when you run the code to swtich from h1 to h2 or h3
 
 # NOTE: The state class is only accessed by the Node class (not accessed directly in the driver)
 class State:
