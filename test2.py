@@ -45,9 +45,6 @@ frontier.insert(node5)
 print(frontier)
 
 
-expanded2 = expand_state(node3)
-
-
 # Testing the frontier pop function
 print("Testing the pop function")
 pop1 = frontier.pop()
