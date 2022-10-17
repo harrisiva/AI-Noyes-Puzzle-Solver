@@ -111,9 +111,7 @@ class Frontier: # A Frontier (has a list that is ordered from lowest to highest 
     def is_empty(self): return len(self.nodes)==0 #NOTE: This function is mainly here to guide is when we translte it to C++
     
     def pop(self): # gives the front node (node with the lowest eval)
-        node = self.nodes[0]
-        self.nodes = self.nodes[1:]
-        return node
+        return self.nodes.pop(0)
 
     def insert(self, node:Node): 
         """Insert item x in list a, and keep it sorted assuming a is sorted.
