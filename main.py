@@ -27,7 +27,7 @@ initial_states = [list(permutation) for permutation in permutations(GOAL_STATE) 
 set_1 = [Node(state) for state in initial_states[1:26]]
 set_2 = [Node(state) for state in initial_states[100:125]]
 set_3 = [Node(state) for state in initial_states[50000:50025]]
-
+set_4 = [Node(state) for state in initial_states[1:100000]]
 print(len(set_1))
 print(len(set_2))
 print(len(set_3))
@@ -37,10 +37,26 @@ print(len(set_3))
 # Required Data:
 # Number of steps to find the solution
 # Number of nodes expanded by A* in each case
-set_ = set_1
-with open('log.txt','w') as file:
+def print_steps(node:Node):
+    steps = []
+    while node!=None:
+        steps.append(node)
+        node = node.parent
+    steps=steps[::-1]
+    for node in steps:
+        print(node)
+        print()
+    print(f'Steps: {len(steps)-1}')
+    return
+
+set_ = set_4
+sate = Node([2, 4, 7, 8, 1, 5, 3, 6, 0])
+EXPLORED = []
+
+solution = graph_search(sate,EXPLORED)
+with open('log3.txt','w') as file:
     for i in range(0,len(set_),1):
         EXPLORED_SET = []
-        solution = graph_search(set_3[0],EXPLORED_SET)
+        solution = graph_search(set_[0],EXPLORED_SET)
         file.write(f'{i}){solution.pcost},{len(EXPLORED_SET)},{set_[i].state.state}\n')
         print(f'{i}) Solved {set_[i].state.state}')
