@@ -58,7 +58,7 @@ def heuristic3(initial_state:list)->int: #Checks number of values in the wrong r
             misplaced_row +=1
     return misplaced_col + misplaced_row
 
-heuristicFunc = heuristic3 # Change this when you run the code to swtich from h1 to h2 or h3
+heuristicFunc = heuristic1 # Change this when you run the code to swtich from h1 to h2 or h3
 
 # NOTE: The state class is only accessed by the Node class (not accessed directly in the driver)
 class State:

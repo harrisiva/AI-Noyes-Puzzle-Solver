@@ -1,7 +1,7 @@
 from dataStructures import *
 from itertools import permutations
 import time
-import numpy
+import numpy as np
 import datetime as dt
 
 def debug(node:Node):
@@ -25,7 +25,7 @@ def graph_search(initial_state:Node, EXPLORED_SET:list):
             if frontier.contains(child)!=True and is_in(EXPLORED_SET,child)!=True: 
                 frontier.insert(child)
         update = dt.datetime.now()
-        if (update-start>dt.timedelta(seconds=60)):
+        if (update-start>dt.timedelta(minutes=5)):
             return False
 
 
@@ -49,12 +49,12 @@ def load():
     return initial_states
 
 initial_states = load()
-set_ = initial_states #set_1
-with open('logh3.txt','w') as file:
+set_ = initial_states[:10000] #set_1
+with open('logh2.txt','w') as file:
     for i in range(0,len(set_),1):
         EXPLORED_SET = []
         solution = graph_search(set_[0],EXPLORED_SET)
         if isinstance(solution,bool)!=True:
             file.write(f'{i}){solution.pcost},{len(EXPLORED_SET)},{set_[i].state.state}\n')
             print(f'{i}) Solved {set_[i].state.state}')
-        else: print(f'{i}) Timed out')
+        else: print(f'{i}) Timed out')  
