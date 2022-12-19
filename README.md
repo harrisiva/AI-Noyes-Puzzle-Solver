@@ -1,4 +1,4 @@
-# NoyesPuzzleAlgorithm
+# AI Noyes Puzzle Solver
 ## Overview
 The goal of this project was to test the performance of three different heuristics for solving a
 NxN puzzle using an A* search algorithm. The code was written in Python, with the additional
